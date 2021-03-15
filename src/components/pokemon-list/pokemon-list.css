@@ -1,0 +1,21 @@
+.pokemon__list{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-right: 30px;
+}
+
+.pokemon-list__item {
+    display: flex;
+    flex-direction: column;
+    background-color:rgba(214, 197, 197, 0.7);
+    width: 30%;
+    margin-bottom: 30px;
+    cursor: pointer;
+    list-style-type: none;
+}
+
+.pokemon-list__item:hover{
+    background-color: rgb(219, 205, 205);
+
+}
