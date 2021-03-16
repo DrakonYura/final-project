@@ -1,24 +1,41 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+
 import PokemonListItem from '../pokemon-list-item';
+
+
+import { clearList} from '../../actions';
+import {fetchMyPokemons} from '../../service';
 
 import {AppStateType, CaughtPokemonItemType} from '../../types/types';
 
 import '../pokemon-list/pokemon-list.css'
+
 
 type MapStateToPropsType = {
     caughtPokemons: Array<CaughtPokemonItemType>
     style: string
 }
 
+type  MapDispatchToPropsType = {
+    clearList:() => void
 
+    fetchMyPokemons:() => void
 
-type PropsType = MapStateToPropsType 
+}
+
+type PropsType = MapStateToPropsType & MapDispatchToPropsType
 
 
 class MyPokemons extends Component<PropsType>{
 
+    componentDidMount(){
+        this.props.fetchMyPokemons();
+    }
 
+    componentWillUnmount() {
+        this.props.clearList();
+    }
     render(){
         const {caughtPokemons, style} = this.props;
 
@@ -54,6 +71,11 @@ const mapStateToProps = (state: AppStateType) => {
     }
 }
 
+const mapDispatchToProps = {
+    clearList,
+    fetchMyPokemons
+};
+
 const Empty = () => {
 
 
@@ -67,4 +89,4 @@ const Empty = () => {
     )
 }
 
-export default connect(mapStateToProps)(MyPokemons);
+export default connect(mapStateToProps, mapDispatchToProps)(MyPokemons);

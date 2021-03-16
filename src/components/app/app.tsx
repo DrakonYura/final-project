@@ -1,7 +1,9 @@
 import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+
 import AppHeader from '../app-header';
 import { HomePage, MyPokemons, PokemonProfilePage } from '../pages';
-import { Route, Switch } from 'react-router-dom';
+
 
 
 

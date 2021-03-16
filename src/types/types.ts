@@ -35,6 +35,7 @@ export const POKEMON_LIST_LOADING = 'POKEMON_LIST_LOADING';
 export const POKEMON_LIST_ERROR = 'POKEMON_LIST_ERROR';
 export const CLEAR_LIST = 'CLEAR_LIST';
 export const ADD_POKEMON_TO_MYPOKEMONS = 'ADD_POKEMON_TO_MYPOKEMONS';
+export const MYPOKEMON_LIST_LOADED = 'MYPOKEMON_LIST_LOADED';
 
 
 export type PokemonListLoadedType = {
@@ -42,6 +43,10 @@ export type PokemonListLoadedType = {
     payload: Array<PokemonItemType>
 }
 
+export type MyPokemonListLoadedType = {
+    type: typeof MYPOKEMON_LIST_LOADED
+    payload: Array<CaughtPokemonItemType>
+}
 
 export type PokemonListLoadingType = {
     type: typeof POKEMON_LIST_LOADING
@@ -58,8 +63,8 @@ export type ClearListType = {
 export type AddToMyPokemonsType = {
     type: typeof ADD_POKEMON_TO_MYPOKEMONS
     time:string
-    payload: number
+    payload: PokemonItemType
 }
 
 export type ActionsType = PokemonListLoadedType | PokemonListLoadingType | PokemonListErrorType |
-                         ClearListType | AddToMyPokemonsType
+                         ClearListType | AddToMyPokemonsType | MyPokemonListLoadedType

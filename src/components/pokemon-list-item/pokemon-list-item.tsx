@@ -52,8 +52,7 @@ const Button = (props : ButtonType) => {
                 let caughtTime = new Date().toLocaleString();
                 if(props.onAddToMyPokemons !== undefined){
                     props.onAddToMyPokemons(caughtTime);
-                }
-                
+                } 
             }}
             className={`${props.style}__btn`}>Catch Me
         </button>

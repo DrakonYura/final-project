@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import PokemonListItem from '../pokemon-list-item';
-//`npm i --save-dev @types/react-redux` для своего webpack
 import { connect } from 'react-redux';
-import { pokemonListLoading, clearList, addToMyPokemons, fetchPageData } from '../../actions';
+
+import PokemonListItem from '../pokemon-list-item';
 import Spinner from '../spinner';
 import Error from '../error';
 
+import { pokemonListLoading, clearList} from '../../actions';
+import {postMyPokemons, fetchPageData, fetchMyPokemons} from '../../service';
+
 import {AppStateType, PokemonItemType, CaughtPokemonItemType} from '../../types/types';
+
 
 import './pokemon-list.css';
 
@@ -14,9 +17,12 @@ import './pokemon-list.css';
 type  MapDispatchToPropsType = {
     pokemonListLoading:() => void
     clearList:() => void
-    addToMyPokemons: (caughtTime:string, id:number) => void
 
-    fetchPageData:( page: number  )=> void
+    postMyPokemons: (caughtTime:string, pokemon:PokemonItemType) => void
+
+    fetchMyPokemons:() => void
+    fetchPageData:( page: number)=> void
+
 }
 
 type MapStateToPropsType = {
@@ -46,6 +52,7 @@ class PokemonList extends Component<PropsType> {
     });
 
     componentDidMount() {
+        this.props.fetchMyPokemons();
         this.props.fetchPageData(this.props.startPage);
     }
 
@@ -53,6 +60,7 @@ class PokemonList extends Component<PropsType> {
         if (this.myElemRef.current !== null) {
             this.myObserver.observe(this.myElemRef.current);
         }
+        
     }
 
     componentWillUnmount() {
@@ -62,7 +70,7 @@ class PokemonList extends Component<PropsType> {
 
     render() {
 
-        const { pokemonItems, caughtPokemons, isLoading, error, addToMyPokemons, pageLoading, style } = this.props;
+        const { pokemonItems, caughtPokemons, isLoading, error, postMyPokemons, pageLoading, style } = this.props;
 
         if (error) {
             return <Error />
@@ -85,7 +93,7 @@ class PokemonList extends Component<PropsType> {
                                     pokemonListItem={pokemon}
                                     isDisabled={isDisabled}
                                     style={style}
-                                    onAddToMyPokemons={(caughtTime:string) => addToMyPokemons(caughtTime, pokemon.id)} />
+                                    onAddToMyPokemons={(caughtTime:string) => postMyPokemons(caughtTime, pokemon)} />
                             </li>
                         )
                     })
@@ -112,8 +120,9 @@ const mapStateToProps = (state: AppStateType) => {
 const mapDispatchToProps = {
     pokemonListLoading,
     clearList,
-    addToMyPokemons,
+    postMyPokemons,
     fetchPageData,
+    fetchMyPokemons,
 };
 
 

@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
+
 import PokemonListItem from '../pokemon-list-item';
-import { pokemonListError, clearList, addToMyPokemons, fetchAllData  } from '../../actions';
 import Spinner from '../spinner';
 import Error from '../error';
 
-
+import { pokemonListError, clearList } from '../../actions';
+import {postMyPokemons, fetchPokemonsData, fetchMyPokemons} from '../../service';
 
 import {AppStateType, PokemonItemType, CaughtPokemonItemType} from '../../types/types';
+
+
+
 
 type MapStateToPropsType = {
     pokemonItems: Array<PokemonItemType> 
@@ -21,9 +25,10 @@ type MapStateToPropsType = {
 type MapDispatchToPropsType = {
     pokemonListError: () => void
     clearList: () => void
-    addToMyPokemons: (caughtTime:string, id:number) => void
+    postMyPokemons: (caughtTime:string, pokemon:PokemonItemType) => void
 
-    fetchAllData: () => void
+    fetchMyPokemons: () => void
+    fetchPokemonsData: () => void
 }
 
 interface MatchParams {
@@ -40,7 +45,8 @@ type PropsType = MapStateToPropsType & MapDispatchToPropsType & IRoute
 class PokemonProfilePage extends Component<PropsType> {
 
     componentDidMount() {
-        this.props.fetchAllData();
+        this.props.fetchMyPokemons();
+        this.props.fetchPokemonsData();
     }
 
     componentWillUnmount() {
@@ -48,7 +54,7 @@ class PokemonProfilePage extends Component<PropsType> {
     }
 
     render() {
-        const { pokemonItems, caughtPokemons, isLoading, error, style, addToMyPokemons } = this.props;
+        const { pokemonItems, caughtPokemons, isLoading, error, style, postMyPokemons } = this.props;
 
         if (error) {
             return (
@@ -91,7 +97,7 @@ class PokemonProfilePage extends Component<PropsType> {
                     isDisabled={isDisabled}
                     page={'profilePokemon'}
                     style={style}
-                    onAddToMyPokemons={(caughtTime) => addToMyPokemons(caughtTime, pokemon.id)} />
+                    onAddToMyPokemons={(caughtTime:string) => postMyPokemons(caughtTime, pokemon)} />
             </div>
         )
     }
@@ -112,8 +118,9 @@ const mapStateToProps = (state : AppStateType) => {
 const mapDispatchToProps = {
     pokemonListError,
     clearList,
-    addToMyPokemons,
-    fetchAllData,
+    postMyPokemons,
+    fetchPokemonsData,
+    fetchMyPokemons,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PokemonProfilePage);

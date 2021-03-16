@@ -19,7 +19,7 @@ const initialState: AppStateType = {
 const reducer = ( state:AppStateType = initialState, action:ActionsType ):AppStateType => {
     switch ( action.type ) {
         case 'POKEMON_LIST_LOADED':
-            const nextPage = state.currentPage + 1;
+            const nextPage = ++state.currentPage;
             const addPokemonList = [...state.pokemonList, ...action.payload]
             return {
                 ...state,
@@ -29,6 +29,12 @@ const reducer = ( state:AppStateType = initialState, action:ActionsType ):AppSta
                 error: false,
                 pageLoading: false
             };
+        case 'MYPOKEMON_LIST_LOADED':
+            const myPokemList = [...action.payload];
+            return {
+                ...state,
+                caughtPokemons: myPokemList
+            }    
         case 'POKEMON_LIST_LOADING':
             return {
                 ...state,
@@ -42,27 +48,20 @@ const reducer = ( state:AppStateType = initialState, action:ActionsType ):AppSta
             }
         case 'CLEAR_LIST':
             const emptyList:Array<PokemonItemType> = [];
+            const emptyMyPokemons: Array<CaughtPokemonItemType> = [];
             return {
                 ...state,
                 pokemonList: emptyList,
+                caughtPokemons: emptyMyPokemons,
                 isLoading: true,
                 currentPage: 1
             }
         case 'ADD_POKEMON_TO_MYPOKEMONS':
-            let newCaughtPokemon:CaughtPokemonItemType = {
-                name : `Can't find pokemon name`,
-                id : `Can't find pokemon id`,
-                time: `Can't find time`
-            };
-            const id = action.payload;
-            const pokemon = state.pokemonList.find(item => item.id === id);
-            if(pokemon !== undefined){
-                newCaughtPokemon = {
-                    ...pokemon,
-                    id: pokemon.id + '',
+            const newCaughtPokemon = {
+                    name : action.payload.name,
+                    id: action.payload.id + '',
                     time: action.time
                 }
-            } 
             
             return {
                 ...state,
